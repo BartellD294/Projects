@@ -28,6 +28,7 @@ public class GameWindow extends JPanel implements ActionListener
         this.setBackground(Color.black);
         this.setFocusable(true);
         this.addKeyListener(new MyKeyAdapter());
+        startGame();
     }
     public void startGame()
     {
@@ -51,7 +52,22 @@ public class GameWindow extends JPanel implements ActionListener
         }
         g.setColor(Color.red);
         g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+
+        for (int i = 0; i< bodyParts; i++)
+        {
+            if (i == 0)
+            {
+                g.setColor(Color.green);
+                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            }
+            else
+            {
+                g.setColor(Color.blue);
+                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+            }
+        }
     }
+
     public void cook() //make new food/apple
     {
         appleX = random.nextInt((int)(WINDOW_WIDTH/UNIT_SIZE))*UNIT_SIZE;
@@ -60,31 +76,112 @@ public class GameWindow extends JPanel implements ActionListener
     }
     public void move()
     {
+        for (int i = bodyParts; i > 0; i--)
+        {
+            x[i] = x[i-1];
+            y[i] = y[i-1];
+        }
+        switch (direction)
+        {
+            case ('u'):
+            y[0] = y[0] - UNIT_SIZE;
+            break;
+            case ('d'):
+            y[0] = y[0] + UNIT_SIZE;
+            break;
+            case ('l'):
+            x[0] = x[0] - UNIT_SIZE;
+            break;
+            case ('r'):
+            x[0] = x[0] + UNIT_SIZE;
+            break;
+        }
 
     }
+
     public void checkFood()
     {
-
+        if ((x[0] == appleX) && (y[0] == appleY))
+        {
+            bodyParts++;
+            applesEaten++;
+            cook();
+        }
     }
+
     public void checkCollision()
     {
+        for (int i = bodyParts; i > 0; i--)         //
+        {                                           //
+            if ((x[0] == x[i]) && (y[0] == y[i]))   // checks for body collision
+            {                                       //
+                running = false;                    //
+            }                                       //
+        }                                           //
+
+        if (x[0]<0)             //if hits left border
+            running = false;    //
+
+        if (x[0] > WINDOW_WIDTH)//if hits right border
+            running = false;    //
+
+        if (y[0] < 0)
+            running = false;
+
+        if (y[0] > WINDOW_HEIGHT)
+            running = false;
+
+        if (!running)
+            timer.stop();
+
+
 
     }
+
     public void gameOver(Graphics g)
     {
 
     }
+
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+        if (running)
+        {
+            move();
+            checkFood();
+            checkCollision();
+        }
+        repaint();
     }
     public class MyKeyAdapter extends KeyAdapter
     {
         @Override
         public void keyPressed(KeyEvent k)
         {
+            switch(k.getKeyCode())
+            {
+                case KeyEvent.VK_LEFT:
+                if (direction != 'r')
+                    direction = 'l';
+                
+                break;
+                case KeyEvent.VK_RIGHT:
+                if (direction != 'l')
+                    direction = 'r';
+                
+                break;
+                case KeyEvent.VK_UP:
+                if (direction != 'd')
+                    direction = 'u';
+                
+                break;
+                case KeyEvent.VK_DOWN:
+                if (direction != 'u')
+                    direction = 'd';
+                
+                break;
+            }
 
         }
     }
