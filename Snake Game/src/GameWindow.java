@@ -45,26 +45,33 @@ public class GameWindow extends JPanel implements ActionListener
     }
     public void draw(Graphics g)
     {
-        for (int i = 0; i < WINDOW_HEIGHT/UNIT_SIZE; i++)
+        if (running)
         {
-            g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, WINDOW_HEIGHT);
-            g.drawLine(0, i*UNIT_SIZE, WINDOW_WIDTH, i*UNIT_SIZE);
-        }
-        g.setColor(Color.red);
-        g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+            for (int i = 0; i < WINDOW_HEIGHT/UNIT_SIZE; i++)
+            {
+                g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, WINDOW_HEIGHT);
+                g.drawLine(0, i*UNIT_SIZE, WINDOW_WIDTH, i*UNIT_SIZE);
+            }
+            g.setColor(Color.red);
+            g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
 
-        for (int i = 0; i< bodyParts; i++)
+            for (int i = 0; i< bodyParts; i++)
+            {
+                if (i == 0)
+                {
+                    g.setColor(Color.green);
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                }
+                else
+                {
+                    g.setColor(Color.blue);
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                }
+            }
+        }
+        else
         {
-            if (i == 0)
-            {
-                g.setColor(Color.green);
-                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-            }
-            else
-            {
-                g.setColor(Color.blue);
-                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-            }
+            gameOver(g);
         }
     }
 
@@ -134,13 +141,14 @@ public class GameWindow extends JPanel implements ActionListener
         if (!running)
             timer.stop();
 
-
-
     }
 
     public void gameOver(Graphics g)
     {
-
+        g.setColor(Color.red);
+        g.setFont(new Font("Arial", Font.BOLD, 75));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString("Game Over", (WINDOW_WIDTH - metrics.stringWidth("Game Over"))/2, )
     }
 
     @Override
