@@ -10,7 +10,7 @@ public class Frame extends JFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.pack();
-        //this.setVisible(true);
+        this.setVisible(true);
         this.setLocationRelativeTo(null); //centers the game window on the screen
     }
 }
