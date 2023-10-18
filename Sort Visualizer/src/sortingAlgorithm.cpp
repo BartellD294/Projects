@@ -6,12 +6,14 @@
 using namespace std;
 using namespace rogueutil;
 
-void draw(int*, int, int);
+void draw(int*, int);
 void randomizeArray(int*);
 void bubbleSort(int*, int*);
 void quickSort(int*, int, int, int*);
 int partition(int*, int, int, int*);
 void insertionSort(int*, int, int*);
+void swap(int*, int, int);
+void waitForUser();
 
 #define NUM_VALUES 100
 #define MAX_VALUE 25
@@ -28,12 +30,15 @@ int main(void)
 	randomizeArray(theArray);
 
 	bubbleSort(theArray, &numBubSwaps);
+	waitForUser();
 	randomizeArray(theArray);
 
 	quickSort(theArray, 0, NUM_VALUES-1, &numQuickSwaps);
+	waitForUser();
 	randomizeArray(theArray);
 
 	insertionSort(theArray, NUM_VALUES, &numInsSwaps);
+	waitForUser();
 
 	cls();
 	setColor(WHITE);
@@ -44,40 +49,17 @@ int main(void)
 	return 0;
 }
 
-void draw(int* theArray, int a, int b)
+void draw(int* theArray, int index)
 {
 	setColor(WHITE);
-	for (int j = 0; j < MAX_VALUE; j++)
+	for (int i = 0; i < MAX_VALUE; i++)
 	{
-		if (j==theArray[a])
+		if (i==theArray[index])
 		{
 			setColor(BLACK);
 		}
-		printXY(a+1, MAX_VALUE-j, to_string(theArray[a]%10));
+		printXY(index+1, MAX_VALUE-i, to_string(theArray[index]%10));
 	}
-	setColor(WHITE);
-	for (int j = 0; j < MAX_VALUE; j++)
-	{
-		if (j==theArray[b])
-		{
-			setColor(BLACK);
-		}
-		printXY(b+1, MAX_VALUE-j, to_string(theArray[b]%10));
-	}
-
-/*	for (int i = a; i <= b; i++)
-	{
-		setColor(WHITE);
-		for (int j = 0; j < MAX_VALUE; j++)
-		{
-			if (j==theArray[i])
-			{
-				setColor(BLACK);
-			}
-				printXY(i+1,MAX_VALUE-j,to_string((theArray[i]%10)));
-		}
-
-	}*/
 	msleep(DELAY);
 	return;
 }
@@ -87,16 +69,18 @@ void randomizeArray(int * theArray)
 	for (int i = 0; i < NUM_VALUES; i++)
 	{
 		theArray[i] = 1 +(rand() % MAX_VALUE);
-		draw(theArray, i,i);
+		draw(theArray,i);
 	}
 
 }
 
-void swap(int* a, int* b)
+void swap(int* theArray, int index1, int index2)
 {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
+	int temp = theArray[index1];
+	theArray[index1] = theArray[index2];
+	theArray[index2] = temp;
+	draw(theArray, index1);
+	draw(theArray, index2);
 }
 
 void bubbleSort(int* theArray, int* numBubSwaps)
@@ -110,10 +94,9 @@ void bubbleSort(int* theArray, int* numBubSwaps)
 		{
 			if (theArray[j] > theArray[j+1])
 			{
-				swap(&theArray[j], &theArray[j+1]);
+				swap(theArray, j, j+1);
 				*numBubSwaps += 1;
 				swapped = true;
-				draw(theArray, j, j+1);
 			}
 			//draw(theArray);
 		}
@@ -145,14 +128,13 @@ int partition(int theArray[], int low, int high, int* numQuickSwaps)
 		if (theArray[j] <= pivot)
 		{
 			i += 1;
-			swap(&theArray[i], &theArray[j]);
+			swap(theArray, i, j);
 			*numQuickSwaps += 1;
-			draw(theArray, i, j);
 		}
 	}
-	swap(&theArray[i+1], &theArray[high]);
+	swap(theArray, i+1, high);
 	*numQuickSwaps += 1;
-	draw(theArray, i+1, high);
+
 	return (i+1);
 }
 
@@ -167,13 +149,21 @@ void insertionSort(int* theArray, int len, int* numInsSwaps)
 
 		while (j >= 0 && theArray[j] > key)
 		{
-			swap(&theArray[j], &theArray[j+1]);
+			swap(theArray, j, j+1);
 			*numInsSwaps += 1;
-			draw(theArray, j, j+1);
 			j--;
 		}
 		theArray[j+1] = key;
 	}
 
+	return;
+}
+
+void waitForUser()
+{
+	setColor(WHITE);
+	printXY(1, MAX_VALUE+3, "Press any key to continue...");
+	anykey();
+	printXY(1, MAX_VALUE+3, "                            ");
 	return;
 }
