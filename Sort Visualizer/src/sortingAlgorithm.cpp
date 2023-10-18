@@ -13,7 +13,7 @@ void quickSort(int*, int, int, int*);
 int partition(int*, int, int, int*);
 void insertionSort(int*, int, int*);
 void swap(int*, int, int);
-void waitForUser();
+void waitForUser(int);
 
 #define NUM_VALUES 100
 #define MAX_VALUE 25
@@ -30,15 +30,15 @@ int main(void)
 	randomizeArray(theArray);
 
 	bubbleSort(theArray, &numBubSwaps);
-	waitForUser();
+	waitForUser(numBubSwaps);
 	randomizeArray(theArray);
 
 	quickSort(theArray, 0, NUM_VALUES-1, &numQuickSwaps);
-	waitForUser();
+	waitForUser(numQuickSwaps);
 	randomizeArray(theArray);
 
 	insertionSort(theArray, NUM_VALUES, &numInsSwaps);
-	waitForUser();
+	waitForUser(numInsSwaps);
 
 	cls();
 	setColor(WHITE);
@@ -159,11 +159,14 @@ void insertionSort(int* theArray, int len, int* numInsSwaps)
 	return;
 }
 
-void waitForUser()
+void waitForUser(int numSwaps)
 {
 	setColor(WHITE);
-	printXY(1, MAX_VALUE+3, "Press any key to continue...");
+	string msg = "Number of swaps: " + to_string(numSwaps);
+	printXY(1, MAX_VALUE+3, msg);
+	printXY(1, MAX_VALUE+4, "Press any key to continue...");
 	anykey();
-	printXY(1, MAX_VALUE+3, "                            ");
+	printXY(1, MAX_VALUE+3, "                                                                            ");
+	printXY(1, MAX_VALUE+4, "                            ");
 	return;
 }
