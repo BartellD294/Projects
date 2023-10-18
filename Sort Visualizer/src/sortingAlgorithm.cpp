@@ -13,7 +13,7 @@ void quickSort(int*, int, int, int*);
 int partition(int*, int, int, int*);
 void insertionSort(int*, int, int*);
 
-#define NUM_VALUES 50
+#define NUM_VALUES 100
 #define MAX_VALUE 25
 #define DELAY 0 //delay after each new draw, in milliseconds
 
@@ -46,7 +46,26 @@ int main(void)
 
 void draw(int* theArray, int a, int b)
 {
-	for (int i = a; i <= b; i++)
+	setColor(WHITE);
+	for (int j = 0; j < MAX_VALUE; j++)
+	{
+		if (j==theArray[a])
+		{
+			setColor(BLACK);
+		}
+		printXY(a+1, MAX_VALUE-j, to_string(theArray[a]%10));
+	}
+	setColor(WHITE);
+	for (int j = 0; j < MAX_VALUE; j++)
+	{
+		if (j==theArray[b])
+		{
+			setColor(BLACK);
+		}
+		printXY(b+1, MAX_VALUE-j, to_string(theArray[b]%10));
+	}
+
+/*	for (int i = a; i <= b; i++)
 	{
 		setColor(WHITE);
 		for (int j = 0; j < MAX_VALUE; j++)
@@ -58,7 +77,7 @@ void draw(int* theArray, int a, int b)
 				printXY(i+1,MAX_VALUE-j,to_string((theArray[i]%10)));
 		}
 
-	}
+	}*/
 	msleep(DELAY);
 	return;
 }
