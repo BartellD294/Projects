@@ -6,7 +6,7 @@
 using namespace std;
 using namespace rogueutil;
 
-void draw(int*);
+void draw(int*, int, int);
 void randomizeArray(int*);
 void bubbleSort(int*);
 void quickSort(int*, int, int);
@@ -26,29 +26,29 @@ int main(void)
 
 	randomizeArray(theArray);
 
-	//bubbleSort(theArray);
-	//randomizeArray(theArray);
+	bubbleSort(theArray);
+	randomizeArray(theArray);
 
-	//quickSort(theArray, 0, NUM_VALUES-1);
-	//randomizeArray(theArray);
+	quickSort(theArray, 0, NUM_VALUES-1);
+	randomizeArray(theArray);
 
 	insertionSort(theArray, NUM_VALUES);
 
 	return 0;
 }
 
-void draw(int* theArray)
+void draw(int* theArray, int a, int b)
 {
-	for (int i = 0; i < NUM_VALUES; i++)
+	for (int i = a; i <= b; i++)
 	{
 		setColor(WHITE);
 		for (int j = 0; j < MAX_VALUE; j++)
 		{
+			if (j==theArray[i])
 			{
-				printXY(i+1,j+1,"X");
-			}
-			if (j+1 == theArray[i])
 				setColor(BLACK);
+			}
+				printXY(i+1,MAX_VALUE-j,to_string((theArray[i]%10)));
 		}
 
 	}
@@ -60,8 +60,8 @@ void randomizeArray(int * theArray)
 {
 	for (int i = 0; i < NUM_VALUES; i++)
 	{
-		theArray[i] = rand() % MAX_VALUE + 1;
-		draw(theArray);
+		theArray[i] = 1 +(rand() % MAX_VALUE);
+		draw(theArray, i,i);
 	}
 
 }
@@ -86,7 +86,7 @@ void bubbleSort(int* theArray)
 			{
 				swap(&theArray[j], &theArray[j+1]);
 				swapped = true;
-				draw(theArray);
+				draw(theArray, j, j+1);
 			}
 			//draw(theArray);
 		}
@@ -119,11 +119,11 @@ int partition(int theArray[], int low, int high)
 		{
 			i += 1;
 			swap(&theArray[i], &theArray[j]);
-			draw(theArray);
+			draw(theArray, i, j);
 		}
 	}
 	swap(&theArray[i+1], &theArray[high]);
-	draw(theArray);
+	draw(theArray, i+1, high);
 	return (i+1);
 }
 
@@ -139,7 +139,7 @@ void insertionSort(int* theArray, int len)
 		while (j >= 0 && theArray[j] > key)
 		{
 			swap(&theArray[j], &theArray[j+1]);
-			draw(theArray);
+			draw(theArray, j, j+1);
 			j--;
 		}
 		theArray[j+1] = key;
