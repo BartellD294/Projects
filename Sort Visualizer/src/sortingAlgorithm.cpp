@@ -8,10 +8,10 @@ using namespace rogueutil;
 
 void draw(int*, int, int);
 void randomizeArray(int*);
-void bubbleSort(int*);
-void quickSort(int*, int, int);
-int partition(int*, int, int);
-void insertionSort(int*, int);
+void bubbleSort(int*, int*);
+void quickSort(int*, int, int, int*);
+int partition(int*, int, int, int*);
+void insertionSort(int*, int, int*);
 
 #define NUM_VALUES 50
 #define MAX_VALUE 25
@@ -19,6 +19,7 @@ void insertionSort(int*, int);
 
 int main(void)
 {
+	int numBubSwaps = 0, numQuickSwaps = 0, numInsSwaps = 0;
 	hidecursor();
 	int * theArray = new int[NUM_VALUES];
 
@@ -26,13 +27,19 @@ int main(void)
 
 	randomizeArray(theArray);
 
-	bubbleSort(theArray);
+	bubbleSort(theArray, &numBubSwaps);
 	randomizeArray(theArray);
 
-	quickSort(theArray, 0, NUM_VALUES-1);
+	quickSort(theArray, 0, NUM_VALUES-1, &numQuickSwaps);
 	randomizeArray(theArray);
 
-	insertionSort(theArray, NUM_VALUES);
+	insertionSort(theArray, NUM_VALUES, &numInsSwaps);
+
+	cls();
+	setColor(WHITE);
+
+	cout<<"Number of sorts in each algorithm:"<<endl<<"Bubble sort: "<<numBubSwaps<<endl;
+	cout<<"Quick sort: "<<numQuickSwaps<<endl<<"Insertion sort: "<<numInsSwaps;
 
 	return 0;
 }
@@ -73,7 +80,7 @@ void swap(int* a, int* b)
 	*b = temp;
 }
 
-void bubbleSort(int* theArray)
+void bubbleSort(int* theArray, int* numBubSwaps)
 {
 	bool swapped;
 	int temp = 0;
@@ -85,6 +92,7 @@ void bubbleSort(int* theArray)
 			if (theArray[j] > theArray[j+1])
 			{
 				swap(&theArray[j], &theArray[j+1]);
+				*numBubSwaps += 1;
 				swapped = true;
 				draw(theArray, j, j+1);
 			}
@@ -97,19 +105,19 @@ void bubbleSort(int* theArray)
 	return;
 }
 
-void quickSort(int theArray[], int low, int high)
+void quickSort(int theArray[], int low, int high, int* numQuickSwaps)
 {
 	if (low < high)
 	{
-		int p = partition(theArray, low, high);
-		quickSort(theArray, low, p-1);
-		quickSort(theArray, p+1, high);
+		int p = partition(theArray, low, high, numQuickSwaps);
+		quickSort(theArray, low, p-1, numQuickSwaps);
+		quickSort(theArray, p+1, high, numQuickSwaps);
 	}
 
 	return;
 }
 
-int partition(int theArray[], int low, int high)
+int partition(int theArray[], int low, int high, int* numQuickSwaps)
 {
 	int pivot = theArray[high];
 	int i = (low-1);
@@ -119,15 +127,17 @@ int partition(int theArray[], int low, int high)
 		{
 			i += 1;
 			swap(&theArray[i], &theArray[j]);
+			*numQuickSwaps += 1;
 			draw(theArray, i, j);
 		}
 	}
 	swap(&theArray[i+1], &theArray[high]);
+	*numQuickSwaps += 1;
 	draw(theArray, i+1, high);
 	return (i+1);
 }
 
-void insertionSort(int* theArray, int len)
+void insertionSort(int* theArray, int len, int* numInsSwaps)
 {
 	int key;
 	int j;
@@ -139,6 +149,7 @@ void insertionSort(int* theArray, int len)
 		while (j >= 0 && theArray[j] > key)
 		{
 			swap(&theArray[j], &theArray[j+1]);
+			*numInsSwaps += 1;
 			draw(theArray, j, j+1);
 			j--;
 		}
