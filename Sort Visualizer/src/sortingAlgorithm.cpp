@@ -12,22 +12,29 @@ void bubbleSort(int*, int*);
 void quickSort(int*, int, int, int*);
 int partition(int*, int, int, int*);
 void insertionSort(int*, int, int*);
+void selectionSort(int[], int*);
 void swap(int*, int, int);
 void waitForUser(int);
 
 #define NUM_VALUES 100
 #define MAX_VALUE 25
-#define DELAY 0 //delay after each new draw, in milliseconds
+#define DELAY 1 //delay after each new draw, in milliseconds
 
 int main(void)
 {
-	int numBubSwaps = 0, numQuickSwaps = 0, numInsSwaps = 0;
+	int numBubSwaps = 0, numQuickSwaps = 0, numInsSwaps = 0, numSelSwaps = 0;
 	hidecursor();
 	int * theArray = new int[NUM_VALUES];
 
 	srand (time(NULL));
 
 	randomizeArray(theArray);
+
+	setColor(WHITE);
+
+	printXY(1, MAX_VALUE+2, "Press any key to begin...");
+	anykey();
+	printXY(1, MAX_VALUE+2, "                         ");
 
 	bubbleSort(theArray, &numBubSwaps);
 	waitForUser(numBubSwaps);
@@ -39,12 +46,17 @@ int main(void)
 
 	insertionSort(theArray, NUM_VALUES, &numInsSwaps);
 	waitForUser(numInsSwaps);
+	randomizeArray(theArray);
+
+	selectionSort(theArray, &numSelSwaps);
+	waitForUser(numSelSwaps);
 
 	cls();
 	setColor(WHITE);
 
 	cout<<"Number of sorts in each algorithm:"<<endl<<"Bubble sort: "<<numBubSwaps<<endl;
-	cout<<"Quick sort: "<<numQuickSwaps<<endl<<"Insertion sort: "<<numInsSwaps;
+	cout<<"Quick sort: "<<numQuickSwaps<<endl<<"Insertion sort: "<<numInsSwaps<<endl;
+	cout<<"Selection sort: "<<numSelSwaps<<endl;
 
 	return 0;
 }
@@ -159,14 +171,34 @@ void insertionSort(int* theArray, int len, int* numInsSwaps)
 	return;
 }
 
+void selectionSort(int theArray[], int* numSelSwaps)
+{
+	int min = 0;
+	for (int i = 0; i < NUM_VALUES; i++)
+	{
+		min = i;
+		for (int j = i+1; j < NUM_VALUES; j++)
+		{
+			if (theArray[j] < theArray[min])
+				min = j;
+		}
+		if (min != i)
+		{
+			swap(theArray, i, min);
+			*numSelSwaps += 1;
+		}
+	}
+	return;
+}
+
 void waitForUser(int numSwaps)
 {
 	setColor(WHITE);
 	string msg = "Number of swaps: " + to_string(numSwaps);
-	printXY(1, MAX_VALUE+3, msg);
-	printXY(1, MAX_VALUE+4, "Press any key to continue...");
+	printXY(1, MAX_VALUE+2, msg);
+	printXY(1, MAX_VALUE+3, "Press any key to continue...");
 	anykey();
-	printXY(1, MAX_VALUE+3, "                                                                            ");
-	printXY(1, MAX_VALUE+4, "                            ");
+	printXY(1, MAX_VALUE+2, "                                                                            ");
+	printXY(1, MAX_VALUE+3, "                            ");
 	return;
 }
