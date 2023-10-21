@@ -1,2 +1,2 @@
 # Projects
-This is my repository for my personal projects.
+A repository for various programming and tech-related projects that I have completed or am currently working on.
