@@ -20,6 +20,7 @@ class Minesweeper:
         self.build()
 
     def build(self):
+        flagCount = 0
 
 
 def main():
