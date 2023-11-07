@@ -9,6 +9,7 @@ class Cell:
         self.x = x
         self.y = y
         self.is_revealed = False
+        self.flagged=False
         Cell.all_cells.append(self)
         self.btn = self.create_btn(root, w, h, text)
     
@@ -73,3 +74,9 @@ class Cell:
 
     def r_click(self, event):
         print(event, "right click")
+        if (self.flagged==True):
+            self.flagged=False
+            self.btn.config(bg="gray40", text="")
+        elif (self.is_revealed==False):
+            self.flagged=True
+            self.btn.config(bg="yellow", text="FLAGGED")
