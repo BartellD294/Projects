@@ -23,31 +23,25 @@ class Cell:
 
     def set_mine(self):
         self.is_mine=True
-        self.btn.config(text="MINE", bg="RED")
+        #self.btn.config(text="MINE", bg="RED")
         
     def reveal(self):
-        self.is_revealed=True
-        self.btn.config(bg="grey80")
-        num=0
-        if (self.is_mine):
-            Minesweeper.game_over()
-        else:
-            cels = [
-                Cell.get_cell(self.x-1, self.y-1),
-                Cell.get_cell(self.x-1, self.y),
-                Cell.get_cell(self.x-1, self.y+1),     
-                Cell.get_cell(self.x, self.y-1),
-                Cell.get_cell(self.x, self.y+1),
-                Cell.get_cell(self.x+1, self.y-1),
-                Cell.get_cell(self.x+1, self.y),
-                Cell.get_cell(self.x+1, self.y+1)
-            ]
-            cels = [cell for cell in cels if cell is not None]
-        
-            for i in range (len(cels)): 
-                if cels[i].is_mine==True:
-                    num+=1
-            self.btn.config(text=num)
+        if (self.is_revealed==False):
+            self.is_revealed=True
+            if (self.is_mine):
+                self.btn.config(text="MINE", bg="red")
+                Minesweeper.game_over()
+            else:
+                num=0
+                adj = self.get_adjacents()
+                for i in range (len(adj)): 
+                    if adj[i].is_mine==True:
+                        num+=1
+                self.btn.config(bg="grey80", text=num)
+                if num==0:
+                    for i in range (len(adj)): 
+                        adj[i].reveal()
+                    
                     
 
     def get_cell(x,y):
@@ -57,9 +51,19 @@ class Cell:
 
 
 
-    def reveal_adjacent(self):
-        for i in range (0,8):
-            self.b += 1
+    def get_adjacents(self):
+        cels = [
+                Cell.get_cell(self.x-1, self.y-1),
+                Cell.get_cell(self.x-1, self.y),
+                Cell.get_cell(self.x-1, self.y+1),     
+                Cell.get_cell(self.x, self.y-1),
+                Cell.get_cell(self.x, self.y+1),
+                Cell.get_cell(self.x+1, self.y-1),
+                Cell.get_cell(self.x+1, self.y),
+                Cell.get_cell(self.x+1, self.y+1)
+            ]
+        cels = [cell for cell in cels if cell is not None]
+        return cels
     
     def l_click(self, event):
         print(event, "left click")
