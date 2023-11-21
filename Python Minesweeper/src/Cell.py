@@ -3,6 +3,7 @@ import Minesweeper
 
 class Cell:
     is_mine=False
+    tiles_to_clear = -10
     all_cells=[]
     def __init__(self, root, w, h,x,y, text="", is_mine = False):
         self.is_mine = is_mine
@@ -11,6 +12,7 @@ class Cell:
         self.is_revealed = False
         self.flagged=False
         Cell.all_cells.append(self)
+        Cell.tiles_to_clear += 1
         self.btn = self.create_btn(root, w, h, text)
     
     def create_btn(self, root, w, h, text):
@@ -33,6 +35,7 @@ class Cell:
                 self.btn.config(text="MINE", bg="red")
                 Minesweeper.game_over()
             else:
+                Cell.tiles_to_clear -= 1
                 num=0
                 adj = self.get_adjacents()
                 for i in range (len(adj)): 
@@ -69,7 +72,7 @@ class Cell:
     def l_click(self, event):
         print(event, "left click")
         print(self.is_revealed)
-        if (self.is_revealed==False):
+        if (self.is_revealed==False and self.flagged==False):
             self.reveal()
 
     def r_click(self, event):

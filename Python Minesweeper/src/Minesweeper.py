@@ -8,6 +8,7 @@ TOP_HEIGHT = HEIGHT*(2/10)
 BIG_HEIGHT = HEIGHT + TOP_HEIGHT
 NUM_ROWS = 10
 NUM_COLS = 10
+NUM_MINES = 10
 CELL_W = WIDTH/NUM_COLS
 CELL_H = HEIGHT/NUM_ROWS
 
@@ -20,6 +21,8 @@ class Minesweeper:
     def __init__(self, root):
         top_frame = Frame(root, width=WIDTH, height = TOP_HEIGHT, bg = "gray14")
         top_frame.pack()
+        self.remaining_label = Label(text=Cell.Cell.tiles_to_clear)
+        self.remaining_label.place(y=TOP_HEIGHT/2)
         main_frame = Frame(root, width=WIDTH, height = HEIGHT, bg = "gray")
         main_frame.pack()
         for i in range (0,NUM_ROWS):
@@ -42,7 +45,7 @@ class Minesweeper:
                 return c
 
     def randomize_mines(self):
-        cells = random.sample(self.field, 10)
+        cells = random.sample(self.field, NUM_MINES)
         for cel in cells:
             #print(cel.btn.cget("text"))
             cel.set_mine()
